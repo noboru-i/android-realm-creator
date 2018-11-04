@@ -9,7 +9,9 @@ import io.realm.Realm
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVRecord
 import java.io.BufferedReader
+import java.io.File
 import java.io.InputStreamReader
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,8 +23,21 @@ class MainActivity : AppCompatActivity() {
 
         realm = Realm.getDefaultInstance()
 
+        val outputFile = File(filesDir, "output.realm")
+        deleteOldData(outputFile)
+
         createCountries()
         createMatch()
+
+        // reduce size
+        realm.writeCopyTo(outputFile)
+    }
+
+    private fun deleteOldData(outputFile: File) {
+        realm.beginTransaction()
+        realm.deleteAll()
+        realm.commitTransaction()
+        outputFile.delete()
     }
 
     private fun createCountries() {
