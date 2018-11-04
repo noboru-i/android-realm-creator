@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        Realm.init(this)
         realm = Realm.getDefaultInstance()
 
         val outputFile = File(filesDir, "output.realm")
